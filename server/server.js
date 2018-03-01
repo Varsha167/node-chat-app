@@ -25,6 +25,17 @@ io.on('connection' , (socket)=>{ //this socket represents individual socket
   // })
 
 
+socket.emit('newMessage' , {
+  from: 'Admin',
+  text: 'Welcome to the chat',
+
+})
+
+socket.broadcast.emit('newMessage' , { //alerts everyone except one user(welcome message for new user and "new user joined " for others)
+  from: 'Admin',
+  text: 'new user joined'
+})
+
   socket.on('createMessage' , (message)=>{
     console.log('message' , message) //Listening from client
     io.emit('newMessage', {
