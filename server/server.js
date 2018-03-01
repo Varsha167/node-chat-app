@@ -18,14 +18,20 @@ app.use(express.static(publicPath))
 io.on('connection' , (socket)=>{ //this socket represents individual socket
   console.log("New user conncted")
 
-  socket.emit('newMessage' , { //emitting to client
-    from: 'Varsha',
-    text: 'I got into Yale!',
-    createdAt: '22'
-  })
+  // socket.emit('newMessage' , { //emitting to client //emits to only one connection
+  //   from: 'Varsha',
+  //   text: 'I got into Yale!',
+  //   createdAt: '22'
+  // })
 
-  socket.on('createMessage' , (createnewchat)=>{
-    console.log(createnewchat) //Listening from client
+
+  socket.on('createMessage' , (message)=>{
+    console.log('message' , message) //Listening from client
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    })
   })
 
   socket.on('disconnect', ()=>{

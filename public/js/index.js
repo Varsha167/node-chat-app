@@ -4,10 +4,10 @@ socket.on('connect' ,()=>{ //variablesocket is already there. so no socket argum
   console.log("Connected to server")
 })
 
-socket.emit('createMessage' , {
-  to:'varsha',
-  text:'Welcome to Yale'
-})
+// socket.emit('createMessage' , {
+//   from:'varsha',
+//   text:'Welcome to Yale'
+// })
 
 socket.on('disconnect', ()=>{
   console.log("Disconnected from server")
