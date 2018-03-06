@@ -7,6 +7,8 @@ const publicPath = path.join(__dirname, '../public')
 const express = require('express')
 const port = process.env.PORT || 3000
 
+const {generateMessage} = require('./utils/message.js')
+
 var app = express()
 
 var server = http.createServer(app)
@@ -24,33 +26,23 @@ io.on('connection' , (socket)=>{ //this socket represents individual socket
   //   createdAt: '22'
   // })
 
+//
+socket.emit('newMessage' , generateMessage('Admin' , 'Welcome to the chat app'))
 
-socket.emit('newMessage' , {
-  from: 'Admin',
-  text: 'Welcome to the chat',
 
-})
+//alerts everyone except one user(welcome message for new user and "new user joined " for others)
+socket.broadcast.emit('newMessage' , generateMessage ('Admin' , 'New user joined'))
 
-socket.broadcast.emit('newMessage' , { //alerts everyone except one user(welcome message for new user and "new user joined " for others)
-  from: 'Admin',
-  text: 'new user joined'
-})
-
-  socket.on('createMessage' , (message)=>{
-    console.log('message' , message) //Listening from client
-    io.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createdAt: new Date().getTime()
-    })
+socket.on('createMessage' , (message,callback)=> {
+console.log('message' , message) //Listening from client for a new message "newMessage" from client index.js. that new message will be "emmitted" to every one connected to the server.
+io.emit('newMessage', generateMessage(message.from, message.text)) //this code piece enables sending messages to all the connected users
+callback('This is from the server.')
   })
 
   socket.on('disconnect', ()=>{
     console.log("User Disconnected")
   })
 })
-
-
 
 
 
