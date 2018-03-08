@@ -1,5 +1,6 @@
 const path = require('path') //built in. no need to install
 const http = require('http') //built in. no need to install
+
 const socketIO = require('socket.io')
 
 const publicPath = path.join(__dirname, '../public')
@@ -7,7 +8,7 @@ const publicPath = path.join(__dirname, '../public')
 const express = require('express')
 const port = process.env.PORT || 3000
 
-const {generateMessage} = require('./utils/message.js')
+const {generateMessage , generateLocationMessage} = require('./utils/message.js')
 
 var app = express()
 
@@ -37,6 +38,10 @@ socket.on('createMessage' , (message,callback)=> {
 console.log('message' , message) //Listening from client for a new message "newMessage" from client index.js. that new message will be "emmitted" to every one connected to the server.
 io.emit('newMessage', generateMessage(message.from, message.text)) //this code piece enables sending messages to all the connected users
 callback('This is from the server.')
+  })
+
+  socket.on('createLocationMessage' , (coords)=>{
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
   })
 
   socket.on('disconnect', ()=>{
