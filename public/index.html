@@ -3,18 +3,32 @@
 <head>
   <meta charset = "utf-8">
 	<title>Chat Bot</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
-<p>Welcome to the chat app</p>
+<body class = "chat">
 
-<ol id = 'messages'></ol>
+  <div class="chat__sidebar">
+    <h3>People</h3>
+    <div id="users">
 
-<form id = "message-form">
-<input name = "message" type = "text" placeholder = "messages"/>
-<button>Send</button>
-</form>
+    </div>
 
-<button id = "location-button">Send Location</button>
+  </div>
+
+<div class="chat__main">
+  <ol id = "messages" class = "chat__messages"></ol>
+  <div class="chat__footer">
+    <form id = "message-form">
+    <input name = "message" type = "text" placeholder = "messages" autofocus autocomplete="off"/>
+    <button>Send</button>
+    <button id = "location-button">Send Location</button>
+    </form>
+  </div>
+</div>
+
+
+
+
 
 <script src = "/socket.io/socket.io.js"></script>
 <script src = "/js/libs/jquery-3.3.1.min.js"></script>
