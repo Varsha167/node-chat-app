@@ -1,18 +1,5 @@
 var socket = io()
 
-socket.on('connect' ,()=>{ //variable socket is already there. so no socket argument required
-  console.log("Connected to server")
-})
-
-// socket.emit('createMessage' , {
-//   from:'varsha',
-//   text:'Welcome to Yale'
-// })
-
-socket.on('disconnect', ()=>{
-  console.log("Disconnected from server")
-})
-
 function scrollToBottom() {
   //selectors
   var messages = jQuery('#messages')
@@ -31,6 +18,38 @@ function scrollToBottom() {
     messages.scrollTop(scrollHeight)
   }
 }
+
+socket.on('connect' ,()=>{ //variable socket is already there. so no socket argument required
+  var params = jQuery.deparam(window.location.search)
+  //console.log("Connected to server")
+  socket.emit('join', params,  function(err) {
+    if(err){
+      alert(err)
+      window.location.href = "/"
+    } else {
+      console.log("No error")
+    }
+  })
+})
+
+// socket.emit('createMessage' , {
+//   from:'varsha',
+//   text:'Welcome to Yale'
+// })
+
+socket.on('disconnect', ()=>{
+  console.log("Disconnected from server")
+})
+
+socket.on('updateUserList' , function (users) {
+  var ol = jQuery('<ol></ol>')
+
+  users.forEach(function(user){ //iterate user list, doing something to that user
+    ol.append(jQuery('<li></li>').text(user))
+  })
+  jQuery('#users').html(ol)
+  console.log('Updated users' , users)
+})
 
 socket.on('newMessage', function(message) {
   //console.log("new Message" , message)
@@ -85,7 +104,7 @@ jQuery('#message-form').on('submit', function(e){
   var messageTextBox =  jQuery('[name = message]')
 
   socket.emit('createMessage' , {
-    from: 'User',
+    //from: 'User',
     text: messageTextBox.val()
   }, function(){
     messageTextBox.val('')
